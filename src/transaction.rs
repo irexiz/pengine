@@ -1,9 +1,10 @@
 use anyhow::Result;
-use serde::{Deserialize, Serialize, Serializer};
+use rust_decimal::Decimal;
+use serde::{Deserialize, Serialize};
 
 pub type ClientId = u16;
 pub type TransactionId = u32;
-pub type Funds = f32;
+pub type Funds = Decimal;
 
 pub trait Transactions {
     fn deposit(&mut self, tx: TransactionId, amount: Option<Funds>);
@@ -38,19 +39,8 @@ pub struct Transaction {
 #[serde(rename_all = "lowercase")]
 pub struct CsvOutput {
     pub client: ClientId,
-    #[serde(serialize_with = "round_serialize")]
     pub available: Funds,
-    #[serde(serialize_with = "round_serialize")]
     pub held: Funds,
-    #[serde(serialize_with = "round_serialize")]
     pub total: Funds,
     pub locked: bool,
-}
-
-// Output Funds with 4 decimal point precision
-fn round_serialize<S>(x: &f32, s: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    s.serialize_str(&format!("{x:.4}"))
 }

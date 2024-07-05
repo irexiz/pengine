@@ -1,4 +1,5 @@
 use anyhow::{bail, Result};
+use rust_decimal::Decimal;
 
 use crate::transaction::{ClientId, Funds, TransactionId, Transactions};
 
@@ -15,9 +16,9 @@ impl ClientAccount {
         Self {
             client,
             // Default funds = 0.0
-            available: 0.0,
-            held: 0.0,
-            total: 0.0,
+            available: Decimal::new(0, 0),
+            held: Decimal::new(0, 0),
+            total: Decimal::new(0, 0),
             locked: false,
         }
     }
