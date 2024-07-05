@@ -323,6 +323,7 @@ dependencies = [
  "env_logger",
  "log",
  "rust_decimal",
+ "rust_decimal_macros",
  "serde",
 ]
 
@@ -519,6 +520,16 @@ dependencies = [
  "rkyv",
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "rust_decimal_macros"
+version = "1.34.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e418701588729bef95e7a655f2b483ad64bb97c46e8e79fde83efd92aaab6d82"
+dependencies = [
+ "quote",
+ "rust_decimal",
 ]
 
 [[package]]

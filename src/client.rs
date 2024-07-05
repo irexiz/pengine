@@ -34,6 +34,10 @@ impl ClientAccount {
 // for now and log it anyway.
 impl Transactions for ClientAccount {
     fn deposit(&mut self, tx: TransactionId, amount: Option<Funds>) {
+        if self.locked {
+            return;
+        }
+
         let Some(amount) = amount else { return }; // Deposit amount must be Some
 
         self.available += amount;
@@ -46,6 +50,10 @@ impl Transactions for ClientAccount {
     }
 
     fn withdraw(&mut self, tx: TransactionId, amount: Option<Funds>) {
+        if self.locked {
+            return;
+        }
+
         let Some(amount) = amount else { return }; // Withdrawal amount must be Some
 
         if self.available < amount {
@@ -67,6 +75,10 @@ impl Transactions for ClientAccount {
     }
 
     fn dispute(&mut self, tx: TransactionId, amount: Option<Funds>) -> Result<()> {
+        if self.locked {
+            return Ok(());
+        }
+
         let Some(amount) = amount else {
             bail!("ClientId: {client} - tx: {tx} - Failed to dispute transaction: Disputed transaction has an unspecified amount (is not Deposit or Withdrawal)", client = self.client);
         };
@@ -83,6 +95,10 @@ impl Transactions for ClientAccount {
     }
 
     fn resolve(&mut self, tx: TransactionId, amount: Option<Funds>) -> Result<()> {
+        if self.locked {
+            return Ok(());
+        }
+
         let Some(amount) = amount else {
             bail!("ClientId: {client} - tx: {tx} - Failed to resolve transaction: Resolved transaction has an unspecified amount (is not Deposit or Withdrawal)", client = self.client);
         };
@@ -99,6 +115,10 @@ impl Transactions for ClientAccount {
     }
 
     fn chargeback(&mut self, tx: TransactionId, amount: Option<Funds>) -> Result<()> {
+        if self.locked {
+            return Ok(());
+        }
+
         let Some(amount) = amount else {
             bail!("ClientId: {client} - tx: {tx} - Failed to resolve transaction: Resolved transaction has an unspecified amount (is not Deposit or Withdrawal)", client = self.client);
         };

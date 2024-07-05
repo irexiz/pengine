@@ -131,54 +131,56 @@ impl ClientRepository {
 
 #[cfg(test)]
 mod test {
+    use rust_decimal_macros::dec;
+
     use super::*;
 
     #[test]
     fn deposit() {
         let mut client = ClientAccount {
             client: 1,
-            available: 0.0,
-            held: 0.0,
-            total: 0.0,
+            available: dec!(0.0),
+            held: dec!(0.0),
+            total: dec!(0.0),
             locked: false,
         };
 
-        client.deposit(1, Some(10.0));
+        client.deposit(1, Some(dec!(10.0)));
 
-        assert_eq!(client.available, 10.0);
-        assert_eq!(client.total, 10.0);
+        assert_eq!(client.available, dec!(10.0));
+        assert_eq!(client.total, dec!(10.0));
     }
 
     #[test]
     fn withdraw() {
         let mut client = ClientAccount {
             client: 1,
-            available: 10.0,
-            held: 0.0,
-            total: 10.0,
+            available: dec!(10.0),
+            held: dec!(0.0),
+            total: dec!(10.0),
             locked: false,
         };
 
-        client.withdraw(1, Some(5.0));
+        client.withdraw(1, Some(dec!(5.0)));
 
-        assert_eq!(client.available, 5.0);
-        assert_eq!(client.total, 5.0);
+        assert_eq!(client.available, dec!(5.0));
+        assert_eq!(client.total, dec!(5.0));
     }
 
     #[test]
     fn withdraw_insufficient_funds() {
         let mut client = ClientAccount {
             client: 1,
-            available: 1.0,
-            held: 0.0,
-            total: 1.0,
+            available: dec!(1.0),
+            held: dec!(0.0),
+            total: dec!(1.0),
             locked: false,
         };
 
-        client.withdraw(1, Some(5.0));
+        client.withdraw(1, Some(dec!(5.0)));
 
-        assert_eq!(client.available, 1.0);
-        assert_eq!(client.total, 1.0);
+        assert_eq!(client.available, dec!(1.0));
+        assert_eq!(client.total, dec!(1.0));
     }
 
     #[test]
@@ -190,13 +192,13 @@ mod test {
                 typ: TransactionType::Deposit,
                 client: 1,
                 tx: 1,
-                amount: Some(10.0),
+                amount: Some(dec!(10.0)),
             },
             Transaction {
                 typ: TransactionType::Withdrawal,
                 client: 1,
                 tx: 2,
-                amount: Some(3.0),
+                amount: Some(dec!(3.0)),
             },
             Transaction {
                 typ: TransactionType::Dispute,
@@ -212,9 +214,9 @@ mod test {
 
         let client = repo.clients.get(&1).unwrap();
 
-        assert_eq!(client.total, 7.0);
-        assert_eq!(client.available, 4.0);
-        assert_eq!(client.held, 3.0);
+        assert_eq!(client.total, dec!(7.0));
+        assert_eq!(client.available, dec!(4.0));
+        assert_eq!(client.held, dec!(3.0));
     }
 
     #[test]
@@ -226,13 +228,13 @@ mod test {
                 typ: TransactionType::Deposit,
                 client: 1,
                 tx: 1,
-                amount: Some(10.0),
+                amount: Some(dec!(10.0)),
             },
             Transaction {
                 typ: TransactionType::Withdrawal,
                 client: 1,
                 tx: 2,
-                amount: Some(3.0),
+                amount: Some(dec!(3.0)),
             },
             Transaction {
                 typ: TransactionType::Dispute,
@@ -254,9 +256,9 @@ mod test {
 
         let client = repo.clients.get(&1).unwrap();
 
-        assert_eq!(client.total, 7.0);
-        assert_eq!(client.available, 7.0);
-        assert_eq!(client.held, 0.0);
+        assert_eq!(client.total, dec!(7.0));
+        assert_eq!(client.available, dec!(7.0));
+        assert_eq!(client.held, dec!(0.0));
     }
 
     #[test]
@@ -268,13 +270,13 @@ mod test {
                 typ: TransactionType::Deposit,
                 client: 1,
                 tx: 1,
-                amount: Some(10.0),
+                amount: Some(dec!(10.0)),
             },
             Transaction {
                 typ: TransactionType::Withdrawal,
                 client: 1,
                 tx: 2,
-                amount: Some(3.0),
+                amount: Some(dec!(3.0)),
             },
             Transaction {
                 typ: TransactionType::Dispute,
@@ -296,9 +298,9 @@ mod test {
 
         let client = repo.clients.get(&1).unwrap();
 
-        assert_eq!(client.total, 4.0);
-        assert_eq!(client.available, 4.0);
-        assert_eq!(client.held, 0.0);
+        assert_eq!(client.total, dec!(4.0));
+        assert_eq!(client.available, dec!(4.0));
+        assert_eq!(client.held, dec!(0.0));
         assert!(client.locked);
     }
 }
