@@ -27,6 +27,7 @@ fn main() -> Result<()> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
     let mut csv_reader = ::csv::ReaderBuilder::new()
+        .flexible(true)
         // Trim all whitespace
         .trim(Trim::All)
         .from_reader(reader);

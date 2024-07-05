@@ -30,6 +30,7 @@ pub struct Transaction {
     pub typ: TransactionType,
     pub client: ClientId,
     pub tx: TransactionId,
+    #[serde(default, deserialize_with = "csv::invalid_option")]
     pub amount: Option<Funds>,
 }
 
